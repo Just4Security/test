@@ -1,0 +1,22 @@
+name: Security Scan
+
+on:
+  # 1. 代码推送到任何分支时触发（最常用的实时拦截）
+  push:
+    branches: [ "**" ] 
+  
+  # 2. 提交 Pull Request 时触发（防止合并到主分支）
+  pull_request:
+  
+  # 3. 合并队列触发（如果使用了 GitHub Merge Queue）
+  merge_group:
+
+  # 4. 新增：允许手动点击按钮触发（用于安全审计或测试新规则）
+  workflow_dispatch:
+
+jobs:
+  secret-scan:
+    # 调用中央仓库定义的逻辑
+    # 语法: {org_name}/{repo}/.github/workflows/{filename}@{ref}
+    uses: Just4Security/security-ops/.github/workflows/reusable-gitleaks.yml@main
+    secrets: inherit # 继承 secrets，如果中央流需要 Token
